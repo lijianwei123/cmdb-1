@@ -1,37 +1,12 @@
 #!/usr/bin/env python3
 import os
-
-try:
-    # This is redundant, we can use try catch to test
-    # if a package's existence.
-    # if os.environ.get('FLASK_COVERAGE', None):
-    #     import coverage
-    #
-    #     COV = coverage.coverage(branch=True, include='apps/*')
-    #     COV.start()
-    import coverage
-    COV = coverage.coverage(branch=True, include='apps/*')
-except ImportError:
-    coverage = COV = None
-
-if os.path.exists('.env'):
-    print('Importing environment from .env...')
-    for line in open('.env'):
-        var = line.strip().split('=')
-        if len(var) == 2:
-            os.environ[var[0]] = var[1]
-
 from flask.ext.script import Manager, Shell
-from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.migrate import Migrate, MigrateCommand, upgrade
+from apps.asset.models import Asset, AssetGroup, Tag, IDC
 
 from apps import create_app, db
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-
-# This import must be put behind app initialization to avoid TypeError because
-# `register_blueprints` function uses app logger which requires app to be
-# created first.
-from apps.common.utils.initialize import load_models, register_blueprints  # NOQA
+app = create_app('default')
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -56,17 +31,6 @@ def test(coverage=False):
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
-    if COV:
-        COV.stop()
-        COV.save()
-        print('Coverage Summary:')
-        COV.report()
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        covdir = os.path.join(basedir, 'tmp/coverage')
-        COV.html_report(directory=covdir)
-        print('HTML version: file://%s/index.html' % covdir)
-        COV.erase()
-
 
 @manager.command
 def profile(length=25, profile_dir=None):
@@ -80,20 +44,20 @@ def profile(length=25, profile_dir=None):
 @manager.command
 def deploy():
     """Run deployment tasks."""
-    from flask.ext.migrate import upgrade
-    from app.models import Role, User
-
-    # migrate database to latest revision
-    upgrade()
-
-    # create user roles
-    Role.insert_roles()
-
-    # create self-follows for all users
-    User.add_self_follows()
+    db.create_all()
+    idc = IDC(name='chinanet')
+    group = AssetGroup(name='group01')
+    tag_rows = [Tag(key=u'设备类型', value=u'物理机'), Tag(key=u'设备类型', value=u'虚拟机'),
+                Tag(key=u'系统类型', value='CentOS'), Tag(key=u'系统类型', value='Ubuntu'),
+                Tag(key='环境', value='生产'), Tag(key=u'环境', value='测试'),
+                Tag(key=u'品牌', value='Dell'), Tag(key=u'品牌', value='HP'),
+                Tag(key=u'状态', value='上线'), Tag(key=u'状态', value='下线'), Tag(key=u'状态', value='报废'),
+                Tag(key=u'平台', value='x86_64'), Tag(key=u'平台', value='x86'),
+                Tag(key=u'数据库', value='数据库'), Tag(key=u'网站', value='网站')]
+    db.session.add_all([idc, group])
+    db.session.bulk_save_objects(tag_rows)
+    db.session.commit()
 
 
 if __name__ == '__main__':
-    load_models()
-    register_blueprints()
     manager.run()
