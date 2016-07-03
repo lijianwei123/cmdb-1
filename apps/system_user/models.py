@@ -17,6 +17,7 @@ class SystemUser(db.Model):
     password = db.Column(db.String(100))
     key_content = db.Column(db.Text)
     key_path = db.Column(db.String(255), nullable=True)
+    level = db.Column(db.Integer)   # 这个是用来说明用户的级别,0为普通用户,1为管理用户
     comment = db.Column(db.String(128), nullable=True)
     editor = db.Column(db.String(128))
     data_joined = db.Column(db.DateTime(), default=datetime.utcnow)
