@@ -50,7 +50,7 @@ class AutoPush(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     tag_id = db.Column(db.Integer, db.ForeignKey('cmdb_tag.id'))
-    sudo_cmd_group = db.Column(db.Integer, default=0)
+    sudo_cmd_group = db.Column(db.Integer, db.ForeignKey('cmdb_sudo_cmd_group.id'))
     system_user_shell = db.Column(db.String(32), nullable=True)
     system_user_home = db.Column(db.String(255), nullable=True)
     system_user_groups = db.Column(db.String(128), nullable=True)
@@ -73,6 +73,7 @@ class PushHistoryDetail(db.Model):
     __tablename__ = 'cmdb_push_history_detail'
 
     id = db.Column(db.Integer, primary_key=True)
+    push_history_id = db.Column(db.Integer, db.ForeignKey('cmdb_push_history.id'))
     asset_id = db.Column(db.Integer, db.ForeignKey('cmdb_asset.id'))
     status = db.Column(db.Boolean(), default=0)
     push_date = db.Column(db.DateTime(), default=datetime.utcnow)
