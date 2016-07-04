@@ -11,27 +11,33 @@ from .models import db, Asset, AssetGroup, IDC, Tag
 def asset_add():
     """
     This is asset add api, please post data like this
-        {"ip": "172.16.1.1", "hostname": "asset-01", "idc": "china-net", "group": ["group-01", "group-02"], ...}
+        {"ip": "172.16.1.1", "hostname": "asset01", "idc": "chinanet", "group": ["group01", "group02"], ...}
     """
-    form = request.form
-    ip = form.get('ip', '')
-    hostname = form.get('hostname', '')
-    idc_name = form.get('idc', '')
-    group_name = form.get('group', '')
-    device_types = form.get('device_type', '')
-    system_types = form.get('system_type', '')
-    tag = form.get('tag', '')
+    json_data = request.get_json(force=True)
+
+    ip = json_data.get('ip', '')
+    hostname = json_data.get('hostname', '')
+    port = json_data.get('port', '')
+    idc_name = json_data.get('idc', '')
+    group_all = json_data.get('group', '')
+    device_types = json_data.get('device_type', '')
+    system_types = json_data.get('system_type', '')
+    tag_all = json_data.get('tag', '')
     asset = Asset(ip=ip, hostname=hostname)
-    idc = IDC.query.filter_by(name=idc_name).first_or_404()
-    group = AssetGroup.query.filter_by(name=group_name).first_or_404()
+    if idc_name:
+        idc = IDC.query.filter_by(name=idc_name).first_or_404()
+        asset.idc = idc
+    for group_name in group_all:
+        group = AssetGroup.query.filter_by(name=group_name).first_or_404()
+        asset.group.append(group)
+    for tag_name in tag_all:
+        tag = Tag.query.filter_by(name=tag_name).first_or_404()
+        asset.tags.append(tag)
     device_type = Tag.query.filter_by(value=device_types).first_or_404()
     system_type = Tag.query.filter_by(value=system_types).first_or_404()
-    tag = Tag.query.filter_by(value=tag).first_or_404()
-    asset.idc = idc
+
     asset.device_type = device_type
     asset.system_type = system_type
-    asset.group.append(group)
-    asset.tags.append(tag)
     db.session.add(asset)
     db.session.commit()
     return jsonify({"code": 200, "message": "success"})
