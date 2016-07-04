@@ -8,20 +8,20 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/add    | POST	 		 | 200   |
 		
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
 	| hostname      | 是	 		 | String   |主机名  |server01|
 	| ip            | 否|String|ip地址|192.168.1.1|
-	|other_ip|否|String|其他ip|["10.0.0.1", "10.0.0.2"]
+	|other_ip|否|String|其他ip|[10.0.0.1, 10.0.0.2]
 	|port|否|int|主机端口|22|
-	|group|否||主机组|["数据库"，"DBA""]|
+	|group|否||主机组|[数据库，DBA]|
 	|idc|否|String|IDC机房|chinanet|
 	|mac|否|String|mac地址|ac:bc:32:82:88:ad|
 	|cpu|否|String|主机cpu|E2690*24|
 	|memory|否|String|主机memory|64G|
-	|disk|否|String|主机disk|{"sda":"500G","sdb":"1T"}|
+	|disk|否|String|主机disk|{"sda":500G,"sdb":1T}|
 	|sn|否|String|主机sn号|TX98GN|
 	|number|否|String|主机资产编号|ABC-0001|
 	|cabinet|否|String|机柜号|2-9|
@@ -32,7 +32,7 @@
 	|status|否|String|状态|已使用|
 	|brand|否|String|品牌|Dell|
 	|system_version|否|String|系统版本号|6.6|
-	|tags|否|String|标签|["数据库", "主站"]
+	|tags|否|String|标签|[数据库, 主站]
 	|is_active|否|String|是否激活|是|
 	|comment|否|String|备注|数据库服务器master|
 	
@@ -65,20 +65,20 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/edit   | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
 	| hostname      | 是	 		 | String   |主机名  |server01|
 	| ip            | 否|String|ip地址|192.168.1.1|
-	|other_ip|否|String|其他ip|["10.0.0.1", "10.0.0.2"]
+	|other_ip|否|String|其他ip|[10.0.0.1, 10.0.0.2]
 	|port|否|int|主机端口|22|
-	|group|否||主机组|["数据库"，"DBA""]|
+	|group|否||主机组|[数据库，DBA]|
 	|idc|否|String|IDC机房|chinanet|
 	|mac|否|String|mac地址|ac:bc:32:82:88:ad|
 	|cpu|否|String|主机cpu|E2690*24|
 	|memory|否|String|主机memory|64G|
-	|disk|否|String|主机disk|{"sda":"500G","sdb":"1T"}|
+	|disk|否|String|主机disk|{"sda":500G,"sdb":1T}|
 	|sn|否|String|主机sn号|TX98GN|
 	|number|否|String|主机资产编号|ABC-0001|
 	|cabinet|否|String|机柜号|2-9|
@@ -89,31 +89,10 @@
 	|status|否|String|状态|已使用|
 	|brand|否|String|品牌|Dell|
 	|system_version|否|String|系统版本号|6.6|
-	|tags|否|String|标签|["数据库", "主站"]
+	|tags|否|String|标签|[数据库, 主站]
 	|is_active|否|String|是否激活|是|
-	|comment|否|String|备注|数据库服务器master|	
+	|comment|否|String|备注|数据库服务器master|
 	
-* Example 
-	
-	post url: /asset/edit
-	
-	parameters: 
-		
-		{
-			"hostname": "server01", 
-			"ip": "192.168.1.1", 
-			"port": 22, 
-			"idc": "chinanet",
- 			"sn": "TX98GN"
-		}
-		
-	return:
-		
-		{
-			"code": 200,
-			"message": "success"
-		}	
-
 	
 ##### 3. asset del
 * URL/Method/CODE
@@ -122,28 +101,11 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/del    | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
 	| hostname      | 是	 		 | String|主机名  |
-
-* Example 
-	
-	post url: /asset/del
-	
-	parameters: 
-		
-		{
-			"hostname": "server01", 
-		}
-		
-	return:
-		
-		{
-			"code": 200,
-			"message": "success"
-		}	
 	
 	
 	
@@ -152,61 +114,13 @@
 
 	| URL           | method        | code  |
 	| ------------- |:-------------:| -----:|
-	| /asset/detail | GET	 		 | 200   | 	
+	| /asset/detail | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
-	| hostname      | 是	 		 | String|主机名 |
-	
-	
-* Example 
-	
-	post url: /asset/detail/?hostname=server01
-	
-	parameters: 
-		
-		{
-			"hostname": "server01", 
-		}
-		
-	return:
-		
-		{
-			"code": 200,
-			"message": "success",
-			"data": {
-        		"brand": "",
-        		"cabinet": null,
-        		"comment": null,
-        		"cpu": null,
-        		"date_add": "Sun, 26 Jun 2016 11:45:18 GMT",
-        		"device_type": "物理机",
-        		"disk": null,
-        		"env": "",
-        		"group": [
-            		"group01"
-        		],
-        		"hostname": "server01",
-        		"id": 1,
-        		"idc": "chinanet",
-        		"ip": "192.168.1.1",
-        		"mac": null,
-        		"memory": null,
-        		"number": null,
-        		"password": null,
-        		"port": null,
-        		"position": null,
-        		"remote_ip": null,
-        		"sn": null,
-        		"status": "",
-        		"system_type": "CentOS",
-        		"tags": [
-            		"数据库", "主站"
-        		]
-		}	
-	
+	| hostname      | 是	 		 | String|主机名  |
 	
 		
 	
@@ -218,7 +132,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/list    | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -240,7 +154,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/group/add    | POST	 		 | 200   |
 		
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
@@ -255,7 +169,7 @@
 	
 	post url: /asset/group/add
 	
-	parameters: 
+	parameter: 
 		
 		{
 			"name": "group01", 
@@ -278,7 +192,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/group/edit   | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
@@ -293,7 +207,7 @@
 	
 	post url: /asset/group/edit
 	
-	parameters: 
+	parameter: 
 		
 		{
 			"name": "group01", 
@@ -318,7 +232,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/group/del    | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -333,7 +247,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/group/detail | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -404,7 +318,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/idc/edit    | POST	 		 | 200   |
 		
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
@@ -422,7 +336,7 @@
 	
 	post url: /asset/idc/edit
 	
-	parameters: 
+	parameter: 
 		
 		{
 			"name": "chinanet", 
@@ -451,7 +365,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/idc/del    | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -466,7 +380,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/idc/detail | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -482,7 +396,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/idc/list    | GET 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -498,7 +412,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/tag/add    | POST	 		 | 200   |
 		
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
@@ -537,7 +451,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/tag/edit    | POST	 		 | 200   |
 		
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |示例|
 	| ------------- |:-------------:| -----:|---- :|---- :|
@@ -552,7 +466,7 @@
 	
 	post url: /asset/tag/edit
 	
-	parameters: 
+	parameter: 
 		
 		{
 			"key": "系统类型",
@@ -577,7 +491,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/tag/del    | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -592,7 +506,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/tag/detail | POST	 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -608,7 +522,7 @@
 	| ------------- |:-------------:| -----:|
 	| /asset/tag/list    | GET 		 | 200   | 	
 	
-* Parameters
+* Parameter
 
 	| 参数     		 | 必填        	 | 类型   |描述  |
 	| ------------- |:-------------:| -----:|---- :|
@@ -617,4 +531,90 @@
 	
 
 ### 3. System user API
+####1.System user add
+POST: /system_user/add
+{
+    "name":“xxx",
+    "username":"admin",
+    "login_type":"T/S/R",  #T telnet  S ssh R rdp
+    "auth_type":"L/K/M",  # L ldap K key M 
+    "password":"********",
+    "key_content":""              ＃密钥内容，可以不用提交
+    "level":0/1                 #0为普通用户，1位管理用户
+    "comment":                 #备注
+    "sudo_group":        #用户组 可不提交
+    "shell":          #用户shell，可不提交
+    "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
+}
+{
+ 	 "success":"true/false",//返回成功与否
+ 	"message":""//返回信息
+}
+
+####2.System user edit
+POST: /system_user/edit
+{
+  "id":1231231
+    "name":“xxx",
+    "username":"admin",
+    "login_type":"T/S/R",  #T telnet  S ssh R rdp
+    "auth_type":"L/K/M",  # L ldap K key M 
+    "password":"********",
+    "key_content":""              ＃密钥内容，可以不用提交
+    "level":0/1                 #0为普通用户，1位管理用户
+    "comment":                 #备注
+    "sudo_group":        #用户组 可不提交
+    "shell":          #用户shell，可不提交
+    "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
+}
+{
+ 	 "success":"true/false",//返回成功与否
+ 	"message":""//返回信息
+}
+
+####3.System user del
+POST: /system_user/del
+{
+	id:123124
+}
+{
+ 	 "success":"true/false",//返回成功与否
+ 	"message":""//返回信息
+}
+
+####3.System user push_history
+POST: /system_user/get_push_history
+{
+	id:123124
+}
+{
+ 	 "success":"true/false",//返回成功与否
+ 	"message":{
+	 	"tag":""
+	 	"asset_group":""
+	 	"status":0/1／2      // 0失败，1执行中，2完成
+	 	"push_date":“2016-07-04 21:32:00”
+	 	"comment":""
+ 	} 
+}
+
+POST: /system_user/get_push_detail
+{
+	id:123124
+}
+{
+ 	 "success":"true/false",//返回成功与否
+ 	"message":[{
+	 	"asset":""
+	 	"status":0/1／2      // 0失败，1执行中，2完成
+	 	"push_date":“2016-07-04 21:32:00”
+	 	"comment":""
+ 	} ,
+ 	]
+}
+
+
+
+	
+
 
