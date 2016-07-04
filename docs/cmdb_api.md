@@ -294,15 +294,15 @@
 	
 	parameter: 
 		
-		{
-			"name": "chinanet", 
-			"linkman", "李刚", 
-			"phone": "18888888888",
-			"address": "北京市天安门路一号",
-			"network": ["192.168.1.0/24", "172.16.1.0/16"],
-			"assets": ["server01", "server02", "server03"],
-			"comment": "BGP核心机房"
-		}
+    {
+        "name": "chinanet",
+        "linkman", "李刚",
+        "phone": "18888888888",
+        "address": "北京市天安门路一号",
+        "network": ["192.168.1.0/24", "172.16.1.0/16"],
+        "assets": ["server01", "server02", "server03"],
+        "comment": "BGP核心机房"
+    }
 		
 	return:
 		
@@ -532,86 +532,89 @@
 
 ### 3. System user API
 ####1.System user add
-POST: /system_user/add
-{
-    "name":“xxx",
-    "username":"admin",
-    "login_type":"T/S/R",  #T telnet  S ssh R rdp
-    "auth_type":"L/K/M",  # L ldap K key M 
-    "password":"********",
-    "key_content":""              ＃密钥内容，可以不用提交
-    "level":0/1                 #0为普通用户，1位管理用户
-    "comment":                 #备注
-    "sudo_group":        #用户组 可不提交
-    "shell":          #用户shell，可不提交
-    "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
-}
-{
- 	 "success":"true/false",//返回成功与否
- 	"message":""//返回信息
-}
+    POST: /system_user/add
+    {
+        "name":“xxx",
+        "username":"admin",
+        "login_type":"T/S/R",  #T telnet  S ssh R rdp
+        "auth_type":"L/K/M",  # L ldap K key M
+        "password":"********",
+        "key_content":""              ＃密钥内容，可以不用提交
+        "level":0/1                 #0为普通用户，1位管理用户
+        "comment":                 #备注
+        "sudo_group":        #用户组 可不提交
+        "shell":          #用户shell，可不提交
+        "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
+    }
+    {
+     	 "success":"true/false",//返回成功与否
+     	"message":""//返回信息
+    }
 
 ####2.System user edit
-POST: /system_user/edit
-{
-  "id":1231231
-    "name":“xxx",
-    "username":"admin",
-    "login_type":"T/S/R",  #T telnet  S ssh R rdp
-    "auth_type":"L/K/M",  # L ldap K key M 
-    "password":"********",
-    "key_content":""              ＃密钥内容，可以不用提交
-    "level":0/1                 #0为普通用户，1位管理用户
-    "comment":                 #备注
-    "sudo_group":        #用户组 可不提交
-    "shell":          #用户shell，可不提交
-    "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
-}
-{
- 	 "success":"true/false",//返回成功与否
- 	"message":""//返回信息
-}
+    POST: /system_user/edit
+    {
+      "id":1231231
+        "name":“xxx",
+        "username":"admin",
+        "login_type":"T/S/R",  #T telnet  S ssh R rdp
+        "auth_type":"L/K/M",  # L ldap K key M
+        "password":"********",
+        "key_content":""              ＃密钥内容，可以不用提交
+        "level":0/1                 #0为普通用户，1位管理用户
+        "comment":                 #备注
+        "sudo_group":        #用户组 可不提交
+        "shell":          #用户shell，可不提交
+        "home":        ＃ 用户家目录，可不提交    "groups"        ＃ 用户，可不提交     "UID"            ＃UID，可不提交
+    }
+    结果返回
+    {
+     	 "success":"true/false",//返回成功与否
+     	"message":""//返回信息
+    }
 
 ####3.System user del
-POST: /system_user/del
-{
-	id:123124
-}
-{
- 	 "success":"true/false",//返回成功与否
- 	"message":""//返回信息
-}
+    POST: /system_user/del
+    {
+        id:123124
+    }
+    {
+     	 "success":"true/false",//返回成功与否
+     	"message":""//返回信息
+    }
 
-####3.System user push_history
-POST: /system_user/get_push_history
-{
-	id:123124
-}
-{
- 	 "success":"true/false",//返回成功与否
- 	"message":{
-	 	"tag":""
-	 	"asset_group":""
-	 	"status":0/1／2      // 0失败，1执行中，2完成
-	 	"push_date":“2016-07-04 21:32:00”
-	 	"comment":""
- 	} 
-}
+####4.System user push_history
+    POST: /system_user/get_push_history
+    {
+        id:123124
+    }
+    {
+     	 "success":"true/false",//返回成功与否
+     	"message":{
+         	"tag":""
+         	"asset_group":""
+         	"status":0/1／2      // 0失败，1执行中，2完成
+         	"push_date":“2016-07-04 21:32:00”
+         	"comment":""
+     	}
+    }
 
-POST: /system_user/get_push_detail
-{
-	id:123124
-}
-{
- 	 "success":"true/false",//返回成功与否
- 	"message":[{
-	 	"asset":""
-	 	"status":0/1／2      // 0失败，1执行中，2完成
-	 	"push_date":“2016-07-04 21:32:00”
-	 	"comment":""
- 	} ,
- 	]
-}
+####5.System user push_detail
+    POST: /system_user/get_push_detail
+    {
+        id:123124
+    }
+    {
+        "success":"true/false",//返回成功与否
+     	"message":[{
+         	"asset":""
+         	"status":0/1／2      // 0失败，1执行中，2完成
+         	"push_date":“2016-07-04 21:32:00”
+         	"comment":""
+     	} ,
+            {}
+     	]
+    }
 
 
 
