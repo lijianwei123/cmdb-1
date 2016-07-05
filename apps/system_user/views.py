@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from flask import jsonify, abort, url_for, request
-# from flask.ext import restful
-from apps import system_user
+from . import system_user
 
 
 @system_user.route('/add', methods=['POST'])
