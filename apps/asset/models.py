@@ -10,6 +10,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(32))
     value = db.Column(db.String(64))
+    kind = db.Column(db.String(32))
     comment = db.Column(db.String(128))
     user_add = db.Column(db.String(32))
 
@@ -81,13 +82,11 @@ class Asset(db.Model):
     __tablename__ = 'cmdb_asset'
 
     id = db.Column(db.Integer, primary_key=True)
-    hostname = db.Column(db.String(128), unique=True, nullable=False)
+    hostname = db.Column(db.String(128), nullable=True)
     ip = db.Column(db.String(32), nullable=True)
     other_ip = db.Column(db.String(128), nullable=True)
     remote_ip = db.Column(db.String(128), nullable=True)
-    username = db.Column(db.String(32), nullable=True)
-    password = db.Column(db.String(32), nullable=True)
-    port = db.Column(db.Integer)
+    port = db.Column(db.Integer, nullable=False)
     group = db.relationship('AssetGroup',
                             secondary=asset_asset_group,
                             backref=db.backref('cmdb_asset', lazy='dynamic'),
@@ -126,8 +125,8 @@ class Asset(db.Model):
         return '<Asset %r>' % self.ip
 
     def get_idc_name(self):
-        idc = IDC.query.get_or_404(self.idc_id)
-        return idc.name
+        idc = IDC.query.filter_by(id=self.idc_id)
+        return idc.first().name if idc.count() != 0 else ''
 
     def get_m2m_name(self, name):
         asset = Asset.query.get_or_404(self.id)
@@ -149,8 +148,6 @@ class Asset(db.Model):
             'ip': self.ip,
             'remote_ip': self.remote_ip,
             'port': self.port,
-            'username': self.username,
-            'password': self.password,
             'idc': self.get_idc_name(),
             'group': self.get_m2m_name('group'),
             'mac': self.mac,

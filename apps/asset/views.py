@@ -18,28 +18,69 @@ def asset_add():
     ip = json_data.get('ip', '')
     hostname = json_data.get('hostname', '')
     port = json_data.get('port', '')
+    remote_ip = json_data.get('remote_ip', '')
+    other_ip = json_data.get('remote_ip', '')
+    group_list = json_data.get('group', [])
     idc_name = json_data.get('idc', '')
-    group_all = json_data.get('group', '')
-    device_types = json_data.get('device_type', '')
-    system_types = json_data.get('system_type', '')
-    tag_all = json_data.get('tag', '')
-    asset = Asset(ip=ip, hostname=hostname)
-    if idc_name:
-        idc = IDC.query.filter_by(name=idc_name).first_or_404()
-        asset.idc = idc
-    for group_name in group_all:
-        group = AssetGroup.query.filter_by(name=group_name).first_or_404()
-        asset.group.append(group)
-    for tag_name in tag_all:
-        tag = Tag.query.filter_by(name=tag_name).first_or_404()
-        asset.tags.append(tag)
-    device_type = Tag.query.filter_by(value=device_types).first_or_404()
-    system_type = Tag.query.filter_by(value=system_types).first_or_404()
+    mac = json_data.get('mac', '')
+    cpu = json_data.get('cpu', '')
+    memory = json_data.get('memory', '')
+    disk = json_data.get('disk', '')
+    sn = json_data.get('sn', '')
+    number = json_data.get('number', '')
+    cabinet = json_data.get('cabinet', '')
+    position = json_data.get('postion', '')
+    system_type = json_data.get('system_type', '')
+    device_type = json_data.get('device_type', '')
+    env = json_data.get('env', '')
+    status = json_data.get('status', '')
+    brand = json_data.get('brand', '')
+    system_arch = json_data.get('system_arch', '')
+    system_version = json_data.get('system_version', '')
+    tags_list = json_data.get('tags', [])
+    is_active = json_data.get('is_active', 1)
+    comment = json_data.get('comment', '')
+    if Asset.query.filter_by(ip=ip, port=port).count() != 0:
+        db.session.rollback()
+        return jsonify({"code": 400, "message": "host {0} and port {1} is exist.".format(ip, port)})
+    try:
+        asset = Asset(ip=ip, port=port, hostname=hostname,
+                      other_ip=other_ip, remote_ip=remote_ip,
+                      mac=mac, memory=memory,
+                      disk=disk, sn=sn,
+                      number=number, cabinet=cabinet,
+                      position=position, system_version=system_version,
+                      is_active=int(is_active), comment=comment)
+        if idc_name:
+            idc = IDC.query.filter_by(name=idc_name).first_or_404()
+            asset.idc = idc
 
-    asset.device_type = device_type
-    asset.system_type = system_type
-    db.session.add(asset)
-    db.session.commit()
+        # for field in ['system_type', 'device_type', 'env', 'status', 'brand', 'system_arch']:
+        #     field_instance = Tag.query.filter_by(value=json_data.get(field, ''))
+        #     setattr(asset, field, field_instance)
+        # if system_type:
+        #     system_type = Tag.query.filter_by(value=system_type).first_or_404()
+        #     asset.system_type = system_type
+        # if device_type:
+        #     device_type = Tag.query.filter_by(value=device_type).first_or_404()
+        #     asset.device_type = device_type
+        #
+        # if env:
+        #     env = Tag.query.filter_by(value=env).first_or_404()
+        #     asset.env = env
+
+        for group_name in group_list:
+            group = AssetGroup.query.filter_by(name=group_name).first_or_404()
+            asset.group.append(group)
+        for tag_name in tags_list:
+            tag = Tag.query.filter_by(name=tag_name).first_or_404()
+            asset.tags.append(tag)
+
+        db.session.add(asset)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"code": 400, "message": "error"})
+
     return jsonify({"code": 200, "message": "success"})
 
 
